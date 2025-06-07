@@ -16,112 +16,107 @@ export interface Lesson {
   questions: Question[];
 }
 
-export const lessons: Lesson[] = [
-  {
-    id: "spanish-basics-1",
-    title: "Spanish Basics - Greetings",
-    description: "Learn essential Spanish greetings and introductions",
-    duration: "5 min",
-    difficulty: "Beginner",
-    questions: [
-      {
-        id: "q1",
-        question: "How do you say 'Hello' in Spanish?",
-        options: ["Adiós", "Hola", "Gracias", "Por favor"],
-        correctAnswer: 1,
-        explanation: "'Hola' is the most common way to say hello in Spanish."
-      },
-      {
-        id: "q2",
-        question: "What does 'Buenos días' mean?",
-        options: ["Good night", "Good morning", "Good afternoon", "Goodbye"],
-        correctAnswer: 1,
-        explanation: "'Buenos días' is used to greet someone in the morning."
-      },
-      {
-        id: "q3",
-        question: "How do you say 'Thank you' in Spanish?",
-        options: ["De nada", "Por favor", "Gracias", "Lo siento"],
-        correctAnswer: 2,
-        explanation: "'Gracias' means thank you in Spanish."
-      },
-      {
-        id: "q4",
-        question: "What is the Spanish word for 'Please'?",
-        options: ["Gracias", "Perdón", "Por favor", "De nada"],
-        correctAnswer: 2,
-        explanation: "'Por favor' is used to say please in Spanish."
-      },
-      {
-        id: "q5",
-        question: "How do you say 'My name is...' in Spanish?",
-        options: ["Me llamo...", "Yo soy...", "Mi nombre...", "Soy..."],
-        correctAnswer: 0,
-        explanation: "'Me llamo...' is the most common way to introduce yourself in Spanish."
-      }
-    ]
-  },
-  {
-    id: "spanish-basics-2",
-    title: "Spanish Numbers 1-10",
-    description: "Master counting from one to ten in Spanish",
-    duration: "4 min",
-    difficulty: "Beginner",
-    questions: [
-      {
-        id: "q1",
-        question: "How do you say 'one' in Spanish?",
-        options: ["dos", "uno", "tres", "cero"],
-        correctAnswer: 1,
-        explanation: "'Uno' means one in Spanish."
-      },
-      {
-        id: "q2",
-        question: "What number is 'cinco'?",
-        options: ["4", "5", "6", "7"],
-        correctAnswer: 1,
-        explanation: "'Cinco' is the Spanish word for five."
-      },
-      {
-        id: "q3",
-        question: "How do you say 'ten' in Spanish?",
-        options: ["nueve", "ocho", "diez", "siete"],
-        correctAnswer: 2,
-        explanation: "'Diez' means ten in Spanish."
-      }
-    ]
-  },
-  {
-    id: "french-basics-1",
-    title: "French Basics - Common Phrases",
-    description: "Essential French phrases for beginners",
-    duration: "6 min",
-    difficulty: "Beginner",
-    questions: [
-      {
-        id: "q1",
-        question: "How do you say 'Hello' in French?",
-        options: ["Au revoir", "Bonjour", "Merci", "S'il vous plaît"],
-        correctAnswer: 1,
-        explanation: "'Bonjour' is the standard way to say hello in French."
-      },
-      {
-        id: "q2",
-        question: "What does 'Merci' mean?",
-        options: ["Hello", "Goodbye", "Thank you", "Please"],
-        correctAnswer: 2,
-        explanation: "'Merci' means thank you in French."
-      },
-      {
-        id: "q3",
-        question: "How do you say 'Excuse me' in French?",
-        options: ["Pardon", "Bonjour", "Merci", "Au revoir"],
-        correctAnswer: 0,
-        explanation: "'Pardon' or 'Excusez-moi' means excuse me in French."
-      }
-    ]
+// Helper function to generate questions for different difficulty levels
+const generateQuestions = (language: string, lessonNumber: number, topic: string): Question[] => {
+  const difficulty = lessonNumber <= 16 ? "Beginner" : lessonNumber <= 33 ? "Intermediate" : "Advanced";
+  const baseQuestions = 15;
+  
+  const questions: Question[] = [];
+  
+  for (let i = 1; i <= baseQuestions; i++) {
+    questions.push({
+      id: `q${i}`,
+      question: `${language} ${topic} - Question ${i} (${difficulty})`,
+      options: [`Option A`, `Option B`, `Option C`, `Option D`],
+      correctAnswer: Math.floor(Math.random() * 4),
+      explanation: `This is the explanation for ${language} ${topic} question ${i}.`
+    });
   }
+  
+  return questions;
+};
+
+// Helper function to get lesson topics based on lesson number
+const getLessonTopic = (lessonNumber: number): string => {
+  const topics = [
+    "Basic Greetings", "Numbers 1-10", "Colors", "Family Members", "Days of Week",
+    "Months", "Weather", "Food & Drinks", "Body Parts", "Clothing",
+    "Transportation", "Animals", "Professions", "House & Home", "School",
+    "Past Tense Basics", "Present Continuous", "Future Tense", "Questions", "Negations",
+    "Prepositions", "Adjectives", "Adverbs", "Comparatives", "Superlatives",
+    "Pronouns", "Possessives", "Modal Verbs", "Conditionals", "Subjunctive",
+    "Complex Grammar", "Idioms", "Phrasal Verbs", "Business Language", "Academic Writing",
+    "Literature", "Philosophy", "Science Terms", "Medical Vocabulary", "Legal Terms",
+    "Advanced Conversation", "Cultural References", "Poetry", "Technical Writing", "Debate Skills",
+    "Negotiation", "Presentation Skills", "Critical Analysis", "Abstract Concepts", "Mastery Test"
+  ];
+  
+  return topics[lessonNumber - 1] || `Advanced Topic ${lessonNumber}`;
+};
+
+// Helper function to get difficulty based on lesson number
+const getDifficulty = (lessonNumber: number): "Beginner" | "Intermediate" | "Advanced" => {
+  if (lessonNumber <= 16) return "Beginner";
+  if (lessonNumber <= 33) return "Intermediate";
+  return "Advanced";
+};
+
+// Helper function to get duration based on difficulty
+const getDuration = (lessonNumber: number): string => {
+  if (lessonNumber <= 16) return `${3 + Math.floor(lessonNumber / 3)} min`;
+  if (lessonNumber <= 33) return `${8 + Math.floor((lessonNumber - 16) / 3)} min`;
+  return `${15 + Math.floor((lessonNumber - 33) / 3)} min`;
+};
+
+// Generate lessons for a language
+const generateLanguageLessons = (language: string, languageCode: string): Lesson[] => {
+  const lessons: Lesson[] = [];
+  
+  for (let i = 1; i <= 50; i++) {
+    const topic = getLessonTopic(i);
+    const difficulty = getDifficulty(i);
+    const duration = getDuration(i);
+    
+    lessons.push({
+      id: `${languageCode}-lesson-${i}`,
+      title: `${language} ${i}: ${topic}`,
+      description: `Learn ${topic.toLowerCase()} in ${language}`,
+      duration,
+      difficulty,
+      questions: generateQuestions(language, i, topic)
+    });
+  }
+  
+  return lessons;
+};
+
+// Generate all lessons for 20 languages
+const languages = [
+  { name: "Spanish", code: "es" },
+  { name: "French", code: "fr" },
+  { name: "German", code: "de" },
+  { name: "Italian", code: "it" },
+  { name: "Portuguese", code: "pt" },
+  { name: "Japanese", code: "ja" },
+  { name: "Korean", code: "ko" },
+  { name: "Chinese", code: "zh" },
+  { name: "Russian", code: "ru" },
+  { name: "Arabic", code: "ar" },
+  { name: "Hindi", code: "hi" },
+  { name: "Dutch", code: "nl" },
+  { name: "Swedish", code: "sv" },
+  { name: "Norwegian", code: "no" },
+  { name: "Polish", code: "pl" },
+  { name: "Turkish", code: "tr" },
+  { name: "Greek", code: "el" },
+  { name: "Hebrew", code: "he" },
+  { name: "Thai", code: "th" },
+  { name: "Vietnamese", code: "vi" }
 ];
+
+export const lessons: Lesson[] = languages.flatMap(language => 
+  generateLanguageLessons(language.name, language.code)
+);
 
 export const achievements = [
   {
@@ -146,6 +141,13 @@ export const achievements = [
     requirement: { type: "streak", count: 7 }
   },
   {
+    id: "streak-30",
+    title: "Monthly Master",
+    description: "Maintain a 30-day streak",
+    type: "flame" as const,
+    requirement: { type: "streak", count: 30 }
+  },
+  {
     id: "perfect-lesson",
     title: "Perfect Score",
     description: "Get 100% on any lesson",
@@ -158,5 +160,19 @@ export const achievements = [
     description: "Complete 5 lessons",
     type: "award" as const,
     requirement: { type: "lessons_completed", count: 5 }
+  },
+  {
+    id: "fifty-lessons",
+    title: "Language Explorer",
+    description: "Complete 50 lessons",
+    type: "award" as const,
+    requirement: { type: "lessons_completed", count: 50 }
+  },
+  {
+    id: "hundred-lessons",
+    title: "Polyglot",
+    description: "Complete 100 lessons",
+    type: "trophy" as const,
+    requirement: { type: "lessons_completed", count: 100 }
   }
 ];
