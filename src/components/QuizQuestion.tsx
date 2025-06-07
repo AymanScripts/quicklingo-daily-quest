@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -15,6 +15,12 @@ interface QuizQuestionProps {
 const QuizQuestion = ({ question, options, correctAnswer, onAnswer, explanation }: QuizQuestionProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+
+  // Reset state when question changes
+  useEffect(() => {
+    setSelectedAnswer(null);
+    setShowResult(false);
+  }, [question]);
 
   const handleAnswer = (index: number) => {
     if (showResult) return;
