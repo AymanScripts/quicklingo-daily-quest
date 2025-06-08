@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import QuizQuestion from "@/components/QuizQuestion";
@@ -188,10 +187,7 @@ const Lesson = () => {
         </div>
 
         <QuizQuestion
-          question={currentQuestion.question}
-          options={currentQuestion.options}
-          correctAnswer={currentQuestion.correctAnswer}
-          explanation={currentQuestion.explanation}
+          question={currentQuestion}
           onAnswer={handleAnswer}
         />
       </main>
